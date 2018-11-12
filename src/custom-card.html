@@ -17,7 +17,7 @@
             }
         </style>
 
-        <div on-click="prueba2" data-item$="[[itemCard]]">
+        <div on-click="removeHeroe" data-item$="[[itemCard]]">
             <div><span class="bold">Name: </span>{{itemCard.name}}</div>
             <div><span class="bold">Mates: </span>{{itemCard.mates}}</div>
         </div>
@@ -38,8 +38,6 @@
             }
             constructor() {
                 super();
-
-                console.log(this.item);
             }
         }
         customElements.define(CustomCard.is, CustomCard);
