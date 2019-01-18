@@ -161,7 +161,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
 
-      _pageChanged(page) {
+      _pageChanged(page, oldPage) {
+        console.log("page of origin: ",oldPage);
         console.log('pageChanged: '+page);
         let resolvedPageUrl = null;
         if (page === 'superheroes-view') {

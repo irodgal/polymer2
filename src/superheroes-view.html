@@ -89,10 +89,9 @@
     <icon-toggle toggle-icon="star"></icon-toggle>
 -->
     <hr>
-    
-    <dom-repeat id="heroesList2" items="{{heroes2}}" as="heroe">   
+    <dom-repeat id="heroesListCustomCard" items="{{heroesCustomCard}}" as="heroeCustomCard">   
         <template>   
-            <custom-card on-click="removeHeroe2" item-card="{{heroe}}"></custom-card>
+            <custom-card on-click="removeHeroeCustomCard" item-card="{{heroeCustomCard}}"></custom-card>
         </template>
     </dom-repeat>
   </template>
@@ -133,7 +132,7 @@
         }
     ];
 
-    let heroesList2 = [
+    let heroesListCustomCard = [
         {
             name: 'Superman',
             mates: 'Justice League'
@@ -168,11 +167,6 @@
         }
     ];
 
-    const ejemplo = {
-        name: 'UNO',
-        mates: 'OTRO'
-    }
-
     class SuperheroesView extends Polymer.Element {
 
         static get is() { 
@@ -185,20 +179,36 @@
                 newHeroeMates: String,
                 heroes: {
                     type: Array,
-                    value: heroesList,
+                    value: function (){
+                        return heroesList;
+                    },
                     notify: true
                 },
-                heroes2: {
+                heroesCustomCard: {
                     type: Array,
-                    value: heroesList2,
+                    value: function(){
+                        return heroesListCustomCard;
+                    },
                     notify: true
-                },
-                toPass: {
-                    type: Object,
-                    value: ejemplo
                 }
-            }
-                
+            }  
+        }
+
+        static get observers() {
+            return [
+                '_arrayHeroesChanged(heroes.splices)',
+                // '_arrayHeroesChanged(heroes.*)',
+                '_arrayHeroesCustomCardChanged(heroesCustomCard.splices)'
+            ]
+        }
+
+        _arrayHeroesChanged(splice) {
+            console.log("change in heroes: ", splice);
+            // lanza el render
+        }
+
+        _arrayHeroesCustomCardChanged(splice) {
+            console.log("Change in heroesCustomCard: ", splice);
         }
 
         addHeroe(event) {
@@ -207,40 +217,30 @@
                 name: this.newHeroeName,
                 mates: this.newHeroeMates
             };
-            this.heroes.push(heroe);
-            this.$.heroesList.render();
+            this.push('heroes', heroe);
+            // Vanilla JS: Polymer no se entera de los cambios
+            // this.heroes.push(heroe);
+            // this.$.heroesList.render();
 
-            const heroe2 = {
+            const heroeCustomCard = {
                 name: this.newHeroeName,
                 mates: this.newHeroeMates
             };
-            this.heroes2.push(heroe2);
-            this.$.heroesList2.render();
+            this.push('heroesCustomCard',heroeCustomCard)
         }
 
         removeHeroe(event) {
-            /*
-            console.log('heroe to remove:');
-            console.log(event.model);
-            console.log(event.model.item);
-            */
-
             const index = this.heroes.indexOf(event.model.item);
-            this.heroes.splice(index, 1);
+            this.splice('heroes', index, 1);
 
-            this.$.heroesList.render();
+            // Vanilla JS: Polymer no se entera de los cambios
+            // this.heroes.splice(index, 1)
+            // this.$.heroesList.render();
         }
 
-        removeHeroe2(event) {
-            /*
-            console.log('heroe to remove2:');
-            console.log(event.model.heroe);
-            */
-
-            const index = this.heroes2.indexOf(event.model.heroe);
-            this.heroes2.splice(index, 1);
-
-            this.$.heroesList2.render();
+        removeHeroeCustomCard(event) {
+            const index = this.heroesCustomCard.indexOf(event.model.heroe);
+            this.splice('heroesCustomCard', index, 1);
         }
     }
 
